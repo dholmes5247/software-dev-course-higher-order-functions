@@ -43,7 +43,14 @@ Step-by-Step:
 2. Use the `filter()` method to apply the callback to the array.
 3. Return the filtered result.
 */
+function filterProducts(products, callback) { // Higher Order Function accepting Array (prodcuts) and Callback Fx
+  return products.filter(callback); // applying callback using .filter method
+}
+const filterAvailability = (product) => product.inStock; // Callback function to filter by inStock
+const filterByPrice = (product) => product.price < 550; //  Callback filtering by price
 
+console.log("Available Products: ", filterProducts(products, filterAvailability));
+console.log("Affordable Products: ", filterProducts(products, filterByPrice));
 
 /*
 🔹 Task 2: Transform Product Names
@@ -56,6 +63,8 @@ Step-by-Step:
 3. Store the result in a new variable.
 */
 
+const productNamesUppercase = products.map(product => product.name.toUpperCase());
+console.log("upperCase Product Names: ", productNamesUppercase);
 
 /*
 🔹 Task 3: Generate Discounted Prices
@@ -69,7 +78,15 @@ Step-by-Step:
 2. Return a new function that takes a product object.
 3. Use this returned function inside a `map()` call to apply discounts to all products.
 */
-
+function applyDiscount(discountPercent) {
+  return function(product) {
+    const discount = (product.price * discountPercent) / 100;
+    const discountedPrice = product.price - discount;
+    return { ...product, price: discountedPrice};
+  }
+}
+const discountedProducts = products.map(applyDiscount(25)); // Applying discount of 25%
+console.log("Discounted Products: ", discountedProducts);
 
 /*
 🔹 Task 4: Calculate Total Inventory Value
@@ -81,7 +98,18 @@ Step-by-Step:
 2. Add only the prices of products where `inStock` is true.
 3. Store the total in a new variable.
 */
+// Step 1: Use `reduce()` on the products array
+const totalInventoryValue = products.reduce((total, product) => {
+  // Add the price to the total only if the product is in stock
+  if (product.inStock) {
+      return total + product.price;
+  } else {
+      return total;
+  }
+}, 0); // Set the initial value of total to 0
 
+// Log the result
+console.log("Total Inventory Value:", totalInventoryValue);
 
 // ============================================
 // 🧪 Console Test Your Work
